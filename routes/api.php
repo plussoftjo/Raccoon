@@ -45,6 +45,7 @@ Route::group(['prefix' => 'coins'], function () {
 
 Route::group(['prefix' => 'main'], function () {
     Route::post('/index','App\Http\Controllers\Api\MainController@index');
+    Route::post('/notification_token/store','App\Http\Controllers\Api\MainController@StoreToken');
 });
 
 

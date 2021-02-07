@@ -10,6 +10,8 @@ use App\Models\Follows;
 use App\Models\Comments;
 use App\Models\PrizesCategories;
 use App\Models\Orders;
+use App\Models\Deploy;
+use App\Models\NotificationsToken;
 use Carbon\Carbon;
 class MainController extends Controller
 {
@@ -30,6 +32,9 @@ class MainController extends Controller
 
         $orders = Orders::where('user_id',$request->user_id)->get();
 
+
+        $dev = Deploy::where("key","dev")->first();
+
         return response()->json([
             'coinsLogs' => $coinsLogs,
             'todayCoins' => $todayCoins,
@@ -40,7 +45,18 @@ class MainController extends Controller
             'todayMakePost' => $todayMakePost,
             'todayMakeComment' => $todayMakeComment,
             'prizesCategories'=> $prizesCategories,
-            'orders' => $orders
+            'orders' => $orders,
+            "dev" => $dev
         ]);
+    }
+
+    public function StoreToken(Request $request) {
+        $checkToken = NotificationsToken::where("token",$request->token)->where("user_id",$request->user_id)->count();
+        if($checkToken == 0){
+            NotificationsToken::create([
+                'token' => $request->token,
+                "user_id" => $request->user_id
+            ]);
+        }
     }
 }
